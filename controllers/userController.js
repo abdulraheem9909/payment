@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Beneficiary = require("../models/Beneficiary");
 
-
 // User signup
 exports.signup = async (req, res) => {
   try {
@@ -92,7 +91,27 @@ exports.resetUsers = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "All users and their beneficiaries reset successfully" });
+      .json({
+        message: "All users and their beneficiaries reset successfully",
+      });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Update user details
+exports.updateUser = async (req, res) => {
+  try {
+    const { userId, ...updateFields } = req.body;
+
+    // Find the user by ID and update with the fields provided
+    const user = await User.findByIdAndUpdate(userId, updateFields, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -8,5 +8,6 @@ router.post('/login', userController.login);
 
 // Reset user route
 router.post('/reset', userController.resetUsers);
+router.put('/update', userController.updateUser);
 
 module.exports = router;
